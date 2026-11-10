@@ -20,6 +20,7 @@ function currentSection() {
 export default function SiteHeader() {
   const [activeSection, setActiveSection] = useState(currentSection)
   const [contentInView, setContentInView] = useState(false)
+  const backdropRef = useRef(null)
   const navRef = useRef(null)
   const indicatorRef = useRef(null)
 
@@ -33,9 +34,10 @@ export default function SiteHeader() {
       frame = 0
       const height = window.innerHeight
       const navBottom = navRef.current.getBoundingClientRect().bottom
+      const backdropBottom = backdropRef.current.getBoundingClientRect().bottom
       const remaining = document.documentElement.scrollHeight - height - window.scrollY
       // Move the reading line down near the end so short sections can still become active.
-      const readingLine = Math.min(height - 1, Math.max(navBottom + 24, height - remaining))
+      const readingLine = Math.min(height - 1, Math.max(backdropBottom, navBottom + 24, height - remaining))
       const viewedSection = sections.findLast((section) => section.getBoundingClientRect().top <= readingLine)
       const section = viewedSection?.id ?? firstSection
       setContentInView(section !== firstSection)
@@ -137,6 +139,7 @@ export default function SiteHeader() {
 
   return (
     <header className="site-header" data-history-backdrop={activeSection === 'geschichte' && contentInView}>
+      <div ref={backdropRef} className="site-header-backdrop" aria-hidden="true" />
       <nav ref={navRef} aria-label="Hauptnavigation">
         <span ref={indicatorRef} className="nav-indicator" aria-hidden="true" />
         <ul>
