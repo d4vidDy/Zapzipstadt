@@ -1,9 +1,25 @@
 :root {
   font: 100%/1.5 system-ui, sans-serif;
-  color: #172820;
-  background: #f8faf7;
+  color: #e8f2ee;
+  --page-background: #0d1523;
+  --section-offset: 5.75rem;
+  background: var(--page-background);
+  scroll-behavior: smooth;
+  scroll-padding-block-start: var(--section-offset);
 }
 
 body {
   margin: 0;
+}
+
+@media (max-width: 690px) {
+  :root {
+    --section-offset: 7.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    scroll-behavior: auto;
+  }
 }
