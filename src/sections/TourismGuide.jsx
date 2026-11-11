@@ -66,7 +66,6 @@ export default function TourismGuide({ activeView }) {
   const frontRef = useRef(null)
   const gestureRef = useRef(null)
   const returnAnimationRef = useRef(null)
-  const suppressClick = useRef(false)
   const [motion, setMotion] = useState('walking')
   const [manualFacing, setManualFacing] = useState(null)
   const lastComment = useRef('')
@@ -77,6 +76,8 @@ export default function TourismGuide({ activeView }) {
   const currentSpeech = speech?.view === activeView ? speech : null
   const tellingFact = currentSpeech?.kind === 'fact'
 
+  if (speech && speech.view !== activeView) setSpeech(null)
+
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
       setVisible(entry.isIntersecting)
@@ -85,10 +86,6 @@ export default function TourismGuide({ activeView }) {
     observer.observe(guideRef.current)
     return () => observer.disconnect()
   }, [])
-
-  useEffect(() => {
-    setSpeech(null)
-  }, [activeView])
 
   useEffect(() => {
     if (!currentSpeech) return
@@ -136,7 +133,6 @@ export default function TourismGuide({ activeView }) {
     returnAnimationRef.current?.cancel()
     returnAnimationRef.current = null
     walker.style.translate = `${offsetX}px ${offsetY}px`
-    suppressClick.current = false
     gestureRef.current = {
       pointerId: event.pointerId,
       startX: event.clientX,
@@ -163,7 +159,6 @@ export default function TourismGuide({ activeView }) {
       setMotion('dragging')
     }
 
-    const guide = guideRef.current.getBoundingClientRect()
     const bounds = guideRef.current.closest('#tourismus').getBoundingClientRect()
     const button = event.currentTarget.getBoundingClientRect()
     const left = clamp(event.clientX - gesture.grabX, bounds.left, bounds.right - button.width)
@@ -186,7 +181,7 @@ export default function TourismGuide({ activeView }) {
     if (gesture?.pointerId !== event.pointerId) return
 
     gestureRef.current = null
-    suppressClick.current = gesture.dragged
+    if (event.type === 'pointerup' && !gesture.dragged) tellFact()
     const walker = walkerRef.current
     const offset = walker.style.translate
     walker.style.translate = ''
@@ -212,8 +207,7 @@ export default function TourismGuide({ activeView }) {
     }
   }
 
-  function tellFact(event) {
-    if (event.detail > 0 && suppressClick.current) return
+  function tellFact() {
     const index = factIndexes.current[activeView] % content.facts.length
     factIndexes.current[activeView] += 1
     setSpeech({ text: content.facts[index], kind: 'fact', duration: factDuration, view: activeView })
@@ -248,7 +242,7 @@ export default function TourismGuide({ activeView }) {
           onPointerUp={releaseYuki}
           onPointerCancel={releaseYuki}
           onLostPointerCapture={releaseYuki}
-          onClick={tellFact}
+          onClick={(event) => event.detail === 0 && tellFact()}
         >
           <span className="tourism-guide-sprite" aria-hidden="true">
             <span className="tourism-guide-gait">
