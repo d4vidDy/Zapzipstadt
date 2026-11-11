@@ -1,0 +1,125 @@
+.site-content > #sehenswuerdigkeiten {
+  box-sizing: border-box;
+  max-inline-size: 82rem;
+  min-block-size: calc(100svh - var(--section-offset));
+  padding-block: clamp(0.9rem, 2.1svh, 1.25rem) clamp(1.75rem, 4svh, 2.5rem);
+}
+
+.attractions {
+  --attractions-lime: #cef879;
+}
+
+.attractions-heading {
+  color: var(--attractions-lime);
+  font-size: clamp(1.9rem, 4.5vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.055em;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.attractions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.85rem, 2vw, 1.4rem);
+  margin-block-start: clamp(1.05rem, 3svh, 1.65rem);
+}
+
+.attraction-card {
+  display: grid;
+  grid-template-columns: minmax(0, 0.44fr) minmax(0, 0.56fr);
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #d6ffc26b #b6e3ab3d #a9e39a38 #c9f4b14d;
+  border-radius: clamp(1.25rem, 2.5vw, 1.75rem);
+  background: linear-gradient(145deg, #233a31ba, #172330e8 78%);
+  backdrop-filter: blur(16px) saturate(1.14);
+  box-shadow: inset 0 1px 0 #f0ffe826, inset 0 -1px 0 #c5edba12,
+    0 0 5px #b1fa4e32, 0 0.6rem 1.5rem #060c1359;
+}
+
+.attraction-illustration {
+  display: grid;
+  min-inline-size: 0;
+  min-block-size: 0;
+  align-self: stretch;
+  place-items: center;
+  padding: 0.65rem 0.55rem 0.65rem 0.75rem;
+  background: radial-gradient(ellipse at 53% 53%, #6eaa4b40, transparent 72%);
+}
+
+.attraction-illustration img {
+  display: block;
+  inline-size: min(100%, clamp(8.5rem, calc(34svh - 2.5rem), 16.5rem));
+  block-size: auto;
+  filter: drop-shadow(0 0.85rem 0.65rem #030b0790);
+}
+
+.attraction-content {
+  min-inline-size: 0;
+  padding: clamp(0.75rem, 1.9svh, 1.125rem) clamp(0.9rem, 1.65vw, 1.4rem);
+}
+
+.attraction-content h3 {
+  margin: 0;
+  color: #f0f9eb;
+  font-size: clamp(1.3rem, 2.05vw, 1.75rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.attraction-content p {
+  margin: 0.8rem 0 0;
+  color: #c4d4cb;
+  font-size: clamp(0.9rem, 1.25vw, 1rem);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .attraction-card {
+    transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 500ms ease, box-shadow 500ms ease;
+  }
+
+  .attraction-card:hover {
+    transform: translateY(-5px);
+    border-color: #e4ffcf92 #c5ecae59 #b3e6a74a #d3ffb96b;
+    box-shadow: inset 0 1px 0 #f0ffe833, inset 0 -1px 0 #c5edba1c,
+      0 0 7px #b1fa4e47, 0 0.75rem 1.65rem #060c1373;
+  }
+}
+
+@media (max-width: 940px) {
+  .attraction-card {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    align-items: start;
+  }
+
+  .attraction-illustration {
+    padding: 0.5rem 1rem 0;
+  }
+
+  .attraction-illustration img {
+    inline-size: min(100%, clamp(8.5rem, 25svh, 14rem));
+  }
+
+  .attraction-content {
+    padding: 1rem clamp(1rem, 4vw, 1.5rem) 1.5rem;
+  }
+}
+
+@media (max-width: 590px) {
+  .attractions-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .attraction-illustration img {
+    inline-size: min(100%, 15rem);
+  }
+}

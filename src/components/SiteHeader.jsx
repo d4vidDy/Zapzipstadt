@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import flyingKitty from '../assets/images/Flying_Kitty_Zapzipstadt.png'
 
 const links = [
   ['startseite', 'Startseite'],
@@ -159,6 +160,9 @@ export default function SiteHeader() {
           ))}
         </ul>
       </nav>
+      <a className="back-to-top" href={`#${firstSection}`} aria-label="Nach oben zur Startseite" title="Nach oben">
+        <img src={flyingKitty} alt="" width={44} height={44} loading="lazy" decoding="async" />
+      </a>
     </header>
   )
 }

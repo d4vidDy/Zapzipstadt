@@ -127,8 +127,8 @@
   opacity: 0;
 }
 
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .tourism-panel[aria-hidden="false"] .tourism-post:hover .tourism-heart {
+@media (prefers-reduced-motion: no-preference) {
+  .tourism-post[data-hearts-active="true"] .tourism-heart {
     animation: tourism-heart-rise var(--heart-duration) ease-out var(--heart-delay) infinite both;
   }
 }

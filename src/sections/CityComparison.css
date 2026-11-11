@@ -1,0 +1,220 @@
+.city-comparison {
+  margin-block-start: clamp(3rem, 7vw, 5.5rem);
+}
+
+.city-comparison-heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.9rem 1.4rem;
+  margin-block-end: 1.25rem;
+}
+
+.city-comparison-heading h3 {
+  margin: 0;
+  font-size: clamp(1.75rem, 4vw, 2.95rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1.08;
+}
+
+.city-comparison-heading h3 span {
+  color: var(--city-lime);
+}
+
+.city-comparison-tabs {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 0.25rem;
+  border: 1px solid #b6f17b58;
+  border-radius: 2rem;
+  background: #11231be6;
+}
+
+.city-comparison-tabs::before {
+  position: absolute;
+  inset: 0.25rem auto 0.25rem 0.25rem;
+  inline-size: calc((100% - 0.5rem) / 2);
+  border-radius: inherit;
+  background: linear-gradient(125deg, #e1ff91, #a8e75a);
+  box-shadow: 0 0.15rem 0.8rem #b9f66740;
+  transform: translateX(calc(var(--comparison-index) * 100%));
+  transition: transform 520ms var(--city-ease);
+  content: '';
+}
+
+.city-comparison-tabs button {
+  position: relative;
+  min-block-size: 2.5rem;
+  padding: 0.55rem 1rem;
+  border: 0;
+  border-radius: 2rem;
+  background: transparent;
+  color: #e7f6d9;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 260ms ease;
+}
+
+.city-comparison-tabs button[aria-selected="true"] {
+  color: #16321e;
+}
+
+.city-comparison-tabs button[aria-selected="false"]:hover {
+  color: var(--city-lime);
+}
+
+.city-comparison :is(button, [role="tabpanel"]):focus-visible {
+  outline: 2px solid var(--city-lime);
+  outline-offset: 3px;
+}
+
+.city-comparison-panels {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid #c4f1b238;
+  border-radius: clamp(1.25rem, 3vw, 1.75rem);
+  background: linear-gradient(135deg, #20372b, #14242b 80%);
+  box-shadow: 0 0.65rem 1.65rem #060c1359;
+}
+
+.city-comparison-panel {
+  display: grid;
+  grid-area: 1 / 1;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.5rem);
+  transition: opacity 480ms ease, transform 680ms var(--city-ease), visibility 0s 680ms;
+}
+
+.city-comparison-panel[data-active="true"] {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition-delay: 0s;
+}
+
+.city-comparison-panel:focus-visible {
+  outline-offset: -4px;
+  z-index: 1;
+}
+
+.city-comparison-media {
+  position: relative;
+  min-block-size: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 0;
+}
+
+.city-comparison-media video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.city-comparison-media figcaption {
+  position: absolute;
+  inset: auto auto 0.9rem 0.9rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid #d6f8c34d;
+  border-radius: 2rem;
+  background: #101b1ae6;
+  color: #eaf6e3;
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+.city-comparison-copy {
+  align-self: center;
+  padding: clamp(1rem, 3.6vw, 2.5rem);
+}
+
+.city-comparison-copy h4 {
+  margin: 0 0 0.95rem;
+  color: #f0f9eb;
+  font-size: clamp(1.2rem, 2.4vw, 1.8rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+}
+
+.city-comparison-copy dl {
+  display: grid;
+  gap: 0.8rem;
+  margin: 0;
+}
+
+.city-comparison-copy dt {
+  color: var(--city-lime);
+  font-weight: 700;
+}
+
+.city-comparison-copy dd {
+  margin: 0.15rem 0 0;
+  color: #c4d4cb;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.city-comparison-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.4rem 1rem;
+  margin-block-start: 0.65rem;
+  color: var(--city-muted);
+  font-size: 0.84rem;
+}
+
+.city-comparison-footer p {
+  margin: 0;
+}
+
+.city-comparison-footer button {
+  min-block-size: 2.5rem;
+  padding: 0.25rem 0;
+  border: 0;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: #dcf8cc;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.city-comparison-footer button:hover {
+  color: var(--city-lime);
+}
+
+@media (max-width: 760px) {
+  .city-comparison-panel {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+  }
+
+  .city-comparison-media {
+    min-block-size: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .city-comparison-tabs::before,
+  .city-comparison-tabs button,
+  .city-comparison-panel {
+    transition: none;
+  }
+
+  .city-comparison-footer button {
+    display: none;
+  }
+}

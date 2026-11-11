@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import instagramPost from '../assets/images/Post_Zapzipstadt.png'
 import TourismGuide from './TourismGuide.jsx'
 import './Tourism.css'
@@ -10,16 +10,25 @@ const mediaViews = [
 
 const heartColors = ['#ff497a', '#ff739e', '#ffb1c9']
 const heartPositions = [
-  [50, 68, -14], [24, 58, -34], [78, 71, 38], [37, 83, -28],
-  [62, 51, 24], [14, 74, -46], [89, 64, 52], [45, 49, -22],
-  [72, 85, 32], [31, 70, -48], [58, 77, 18], [17, 48, -30],
-  [84, 45, 44], [67, 62, 27], [43, 88, -13], [54, 39, 16],
-  [9, 88, -43], [92, 84, 47],
+  [50, 63, -14], [24, 53, -34], [78, 61, 38], [37, 67, -28],
+  [62, 48, 24], [14, 58, -46], [89, 59, 52], [45, 46, -22],
+  [72, 66, 32], [31, 57, -48], [58, 64, 18], [17, 47, -30],
+  [84, 45, 44], [67, 56, 27], [43, 67, -13], [54, 42, 16],
+  [9, 65, -43], [92, 64, 47],
 ]
 
-function InstagramPost() {
+function InstagramPost({ active }) {
+  const postRef = useRef(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting))
+    observer.observe(postRef.current)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <figure className="tourism-post">
+    <figure className="tourism-post" ref={postRef} data-hearts-active={active && visible}>
       <img
         src={instagramPost}
         alt="Instagram-Beitrag mit einer Illustration der Umweltschule, des Katzengrasfelds und eines Zuges."
@@ -97,7 +106,7 @@ export default function Tourism() {
                 aria-hidden={!showingPost}
                 inert={!showingPost}
               >
-                <InstagramPost />
+                <InstagramPost active={showingPost} />
               </div>
 
               <div

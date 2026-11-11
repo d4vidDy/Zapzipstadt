@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import { cityPlaces } from './cityPlaces.js'
+import CityComparison from './CityComparison.jsx'
 import './City.css'
 
 function Arrow({ back = false }) {
@@ -193,6 +194,8 @@ export default function City() {
           <CityInfographic />
         </div>
       </div>
+
+      <CityComparison />
     </section>
   )
 }

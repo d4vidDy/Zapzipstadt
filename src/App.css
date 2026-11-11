@@ -46,7 +46,7 @@
   list-style: none;
 }
 
-.site-header a {
+.site-header nav a {
   position: relative;
   display: grid;
   min-height: 2.55rem;
@@ -63,17 +63,55 @@
   transition: color 220ms ease;
 }
 
-.site-header a:hover {
+.site-header nav a:hover {
   color: #dbff92;
 }
 
-.site-header a[aria-current="location"] {
+.site-header nav a[aria-current="location"] {
   color: #16321e;
 }
 
-.site-header a:focus-visible {
+.site-header nav a:focus-visible {
   outline: 2px solid #e7ffbc;
   outline-offset: -2px;
+}
+
+.back-to-top {
+  position: fixed;
+  inset-inline-end: max(clamp(0.8rem, 2vw, 1.75rem), env(safe-area-inset-right));
+  inset-block-end: max(clamp(0.8rem, 2vw, 1.5rem), env(safe-area-inset-bottom));
+  display: block;
+  inline-size: clamp(4rem, 6vw, 5rem);
+  pointer-events: auto;
+  transition: transform 240ms ease;
+}
+
+.back-to-top img {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .back-to-top:hover {
+    transform: translateY(-3px);
+  }
+}
+
+.back-to-top:focus-visible {
+  outline: 2px solid #e7ffbc;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .site-header[data-history-backdrop="false"] .back-to-top img {
+    animation: back-to-top-float 1.7s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes back-to-top-float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-0.65rem); }
 }
 
 .nav-indicator {
@@ -101,7 +139,8 @@
 }
 
 .site-content > #geschichte,
-.site-content > #unsere-stadt {
+.site-content > #unsere-stadt,
+.site-content > #tourismus {
   border-bottom: 0;
 }
 
@@ -125,7 +164,7 @@
     gap: 0.1rem;
   }
 
-  .site-header a {
+  .site-header nav a {
     min-height: 2.5rem;
     padding: 0.25rem 0.15rem;
     font-size: clamp(0.64rem, 2.7vw, 0.82rem);
@@ -134,7 +173,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .site-header-backdrop,
-  .site-header a,
+  .site-header nav a,
+  .back-to-top,
   .nav-indicator[data-ready] {
     transition: none;
   }

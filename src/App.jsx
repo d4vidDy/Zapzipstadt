@@ -19,8 +19,8 @@ export default function App() {
         <City />
         <Tourism />
         <Attractions />
-        <Sources />
       </main>
+      <Sources />
     </>
   )
 }
