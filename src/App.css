@@ -1,6 +1,6 @@
 .site-header {
   position: fixed;
-  z-index: 5;
+  z-index: 100;
   inset: 1rem 0 auto;
   display: grid;
   justify-items: center;
@@ -11,7 +11,7 @@
   position: fixed;
   z-index: -1;
   inset: 0 0 auto;
-  block-size: calc(var(--section-offset) + 1px);
+  block-size: var(--header-cover-height, calc(var(--section-offset) - 1rem));
   background: var(--page-background);
   opacity: 0;
   pointer-events: none;
@@ -32,10 +32,13 @@
   background: #11231be6;
   box-shadow: 0 0.6rem 2rem #030b0766;
   backdrop-filter: blur(18px);
+  isolation: isolate;
   pointer-events: auto;
 }
 
 .site-header ul {
+  position: relative;
+  z-index: 1;
   display: flex;
   gap: 0.16rem;
   margin: 0;
@@ -74,6 +77,8 @@
 }
 
 .nav-indicator {
+  z-index: 0;
+  will-change: transform;
   position: absolute;
   inset: 0 auto auto 0;
   border-radius: 2rem;
@@ -83,9 +88,9 @@
 }
 
 .nav-indicator[data-ready] {
-  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
-    width 520ms cubic-bezier(0.22, 1, 0.36, 1),
-    height 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 440ms cubic-bezier(0.22, 1, 0.36, 1),
+    width 440ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 440ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .site-content > section:not(.hero) {
@@ -93,6 +98,11 @@
   margin-inline: auto;
   padding: clamp(2.5rem, 8vw, 5rem) clamp(1rem, 5vw, 3rem);
   border-bottom: 1px solid #273648;
+}
+
+.site-content > #geschichte,
+.site-content > #unsere-stadt {
+  border-bottom: 0;
 }
 
 .site-content h2 {
