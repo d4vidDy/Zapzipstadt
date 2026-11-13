@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="164" height="40" viewBox="0 0 164 40" role="img" aria-label="Explorar la ciudad">
+  <defs>
+    <linearGradient id="lime" x2="1" y2="1">
+      <stop stop-color="#e1ff91"/>
+      <stop offset="1" stop-color="#a8e75a"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="162" height="38" rx="19" fill="url(#lime)" stroke="#a8e75a"/>
+  <text x="76" y="25" text-anchor="middle" fill="#16321e" font-family="Arial, sans-serif" font-size="14" font-weight="700">Explorar la ciudad</text>
+  <path d="M139 20h9m-4-4 4 4-4 4" fill="none" stroke="#16321e" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+</svg>

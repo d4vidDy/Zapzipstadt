@@ -6,7 +6,10 @@
 >
 > Donde el futuro es verde y el aire es limpio.
 
-**[Explorar la ciudad](https://d4viddy.github.io/Zapzipstadt/)** · [Ver las fuentes y los créditos](https://d4viddy.github.io/Zapzipstadt/#quellen)
+<p>
+  <a href="https://d4viddy.github.io/Zapzipstadt/"><img src="./docs/images/explorar-ciudad.svg" width="164" height="40" alt="Explorar la ciudad"></a>
+  <a href="https://d4viddy.github.io/Zapzipstadt/#quellen"><img src="./docs/images/ver-fuentes.svg" width="213" height="40" alt="Ver las fuentes y los créditos"></a>
+</p>
 
 Zapzipstadt es una ciudad ficticia habitada por los Michien. Esta web, desarrollada como proyecto de un curso de alemán, cuenta su historia y muestra cómo la comunidad incorpora la energía solar, los espacios verdes y el transporte eléctrico a su vida cotidiana.
 
@@ -19,7 +22,7 @@ Zapzipstadt es una ciudad ficticia habitada por los Michien. Esta web, desarroll
 | [Unsere Stadt](https://d4viddy.github.io/Zapzipstadt/#unsere-stadt) | Un mapa isométrico con cinco lugares explorables, estadísticas, una infografía y un comparativo con Copenhague y Singapur que incluye videos Full HD. |
 | [Tourismus und Freizeit](https://d4viddy.github.io/Zapzipstadt/#tourismus) | Una publicación de Instagram con corazones animados y Yuki, un Michien al que puedes arrastrar o tocar para descubrir curiosidades en alemán. |
 | [Sehenswürdigkeiten](https://d4viddy.github.io/Zapzipstadt/#sehenswuerdigkeiten) | Cuatro lugares turísticos ilustrados con descripciones en alemán. |
-| [Quellen](https://d4viddy.github.io/Zapzipstadt/#quellen) | Referencias, créditos audiovisuales, cinco prompts del desarrollo y una reflexión sobre el uso de IA. |
+| [Quellen](https://d4viddy.github.io/Zapzipstadt/#quellen) | Fuentes de consulta y créditos de los recursos audiovisuales. |
 
 ## Desarrollo
 
@@ -55,4 +58,4 @@ Abre la URL que indique Vite en la terminal.
 
 Cada push a `main` ejecuta el flujo de GitHub Actions que instala las dependencias, compila el sitio y publica `dist/` en GitHub Pages. [Ver flujo de publicación](./.github/workflows/deploy-pages.yml)
 
-La portada de este README se generó con IA a partir de los personajes y las ilustraciones del proyecto. La web reúne las fuentes, las herramientas utilizadas y las licencias de los videos. [Consultar Quellen](https://d4viddy.github.io/Zapzipstadt/#quellen)
+La sección de fuentes reúne las referencias del proyecto y las licencias de los videos. [Consultar Quellen](https://d4viddy.github.io/Zapzipstadt/#quellen)
