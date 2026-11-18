@@ -66,7 +66,7 @@
   color: #e7f6d9;
   font: inherit;
   text-align: center;
-  cursor: pointer;
+  cursor: var(--site-pointer), pointer;
   transition: color 220ms ease;
 }
 
@@ -148,7 +148,7 @@
   font: inherit;
   font-size: 1.35rem;
   line-height: 1;
-  cursor: pointer;
+  cursor: var(--site-pointer), pointer;
 }
 
 .history-controls button:hover {

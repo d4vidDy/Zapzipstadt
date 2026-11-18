@@ -128,7 +128,7 @@
   font: inherit;
   font-weight: 700;
   text-align: start;
-  cursor: pointer;
+  cursor: var(--site-pointer), pointer;
   transition: background-color 220ms ease, color 220ms ease;
 }
 

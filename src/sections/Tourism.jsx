@@ -1,7 +1,12 @@
+import { ArrowUpRight, Play } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import YouTube from 'react-youtube'
 import instagramPost from '../assets/images/Post_Zapzipstadt.png'
 import TourismGuide from './TourismGuide.jsx'
 import './Tourism.css'
+
+const cityFilmId = 't8aVpTGjky4'
+const cityFilmUrl = `https://www.youtube.com/watch?v=${cityFilmId}`
 
 const mediaViews = [
   { id: 'tourism-instagram', label: 'Fotobeitrag' },
@@ -68,6 +73,52 @@ function InstagramPost({ active }) {
   )
 }
 
+function TourismFilmPlayer() {
+  const [stage, setStage] = useState('preview')
+
+  if (stage === 'player') {
+    return (
+      <YouTube
+        className="tourism-film-embed"
+        videoId={cityFilmId}
+        title="Zapzipstadt im Film"
+        opts={{
+          width: '100%',
+          height: '100%',
+          playerVars: { autoplay: 1, playsinline: 1, rel: 0, hl: 'de', origin: window.location.origin },
+        }}
+        onReady={({ target }) => {
+          if (document.activeElement === document.body) {
+            target.getIframe().focus({ preventScroll: true })
+          }
+        }}
+        onError={({ data }) => setStage(data === 101 || data === 150 ? 'restricted' : 'error')}
+      />
+    )
+  }
+
+  if (stage === 'restricted' || stage === 'error') {
+    const message = stage === 'restricted'
+      ? 'Dieses Video kann nur auf YouTube abgespielt werden.'
+      : 'Das Video kann hier gerade nicht abgespielt werden.'
+    return <p className="tourism-film-error" role="status">{message}</p>
+  }
+
+  return (
+    <button
+      className="tourism-film-preview"
+      type="button"
+      aria-label="Zapzipstadt im Film abspielen"
+      onClick={() => setStage('player')}
+    >
+      <img src={`https://i.ytimg.com/vi/${cityFilmId}/maxresdefault.jpg`} alt="" width={1280} height={720} decoding="async" />
+      <span className="tourism-film-play" aria-hidden="true">
+        <Play size={25} fill="currentColor" />
+      </span>
+    </button>
+  )
+}
+
 export default function Tourism() {
   const [activeView, setActiveView] = useState(0)
   const showingPost = activeView === 0
@@ -123,9 +174,15 @@ export default function Tourism() {
                     Begleite die Michien durch grüne Parks und über den Markt. Entdecke
                     das Katzengrasfeld und das fliegende Gebäude.
                   </p>
-                  <div className="tourism-video-placeholder">
-                    <span className="tourism-play-icon" aria-hidden="true">▶</span>
-                    <span>Video folgt</span>
+                  <div className="tourism-film-frame">
+                    <div className="tourism-film-screen">
+                      {!showingPost && <TourismFilmPlayer />}
+                    </div>
+                    <div className="tourism-film-links">
+                      <a href={cityFilmUrl} target="_blank" rel="noopener noreferrer">
+                        Auf YouTube ansehen <ArrowUpRight size={16} aria-hidden="true" />
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>

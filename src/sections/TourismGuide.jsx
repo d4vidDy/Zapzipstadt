@@ -65,7 +65,6 @@ export default function TourismGuide({ activeView }) {
   const walkerRef = useRef(null)
   const frontRef = useRef(null)
   const gestureRef = useRef(null)
-  const returnAnimationRef = useRef(null)
   const [motion, setMotion] = useState('walking')
   const [manualFacing, setManualFacing] = useState(null)
   const lastComment = useRef('')
@@ -119,28 +118,53 @@ export default function TourismGuide({ activeView }) {
     return () => window.clearTimeout(timer)
   }, [activeView, content, currentSpeech, motion, visible])
 
-  useEffect(() => () => returnAnimationRef.current?.cancel(), [])
+  useEffect(() => {
+    const guide = guideRef.current
+    const walker = walkerRef.current
+    const section = guide.closest('#tourismus')
+    const button = walker.querySelector('button')
+
+    function updateWalkingBounds() {
+      const guideBounds = guide.getBoundingClientRect()
+      const sectionBounds = section.getBoundingClientRect()
+      const inset = (walker.offsetWidth - button.offsetWidth) / 2
+      const minX = sectionBounds.left - guideBounds.left - inset
+      const minY = sectionBounds.top - guideBounds.top
+
+      walker.style.setProperty('--yuki-min-x', minX + 'px')
+      walker.style.setProperty('--yuki-max-x', (minX + sectionBounds.width - button.offsetWidth) + 'px')
+      walker.style.setProperty('--yuki-min-y', minY + 'px')
+      walker.style.setProperty('--yuki-max-y', (minY + sectionBounds.height - button.offsetHeight) + 'px')
+    }
+
+    updateWalkingBounds()
+    const observer = new ResizeObserver(updateWalkingBounds)
+    observer.observe(guide)
+    observer.observe(section)
+    observer.observe(button)
+    return () => observer.disconnect()
+  }, [])
 
   function grabYuki(event) {
     if (!event.isPrimary || event.button !== 0 || gestureRef.current) return
 
     const walker = walkerRef.current
-    const [x = 0, y = 0] = getComputedStyle(walker).translate.split(' ').map(Number.parseFloat)
-    const offsetX = Number.isFinite(x) ? x : 0
-    const offsetY = Number.isFinite(y) ? y : 0
+    const guideBounds = guideRef.current.getBoundingClientRect()
+    const walkerBounds = walker.getBoundingClientRect()
+    const x = walkerBounds.left - guideBounds.left
+    const y = walkerBounds.top - guideBounds.top
     const button = event.currentTarget.getBoundingClientRect()
 
-    returnAnimationRef.current?.cancel()
-    returnAnimationRef.current = null
-    walker.style.translate = `${offsetX}px ${offsetY}px`
+    walker.style.setProperty('--yuki-drag-x', x + 'px')
+    walker.style.setProperty('--yuki-drag-y', y + 'px')
     gestureRef.current = {
       pointerId: event.pointerId,
       startX: event.clientX,
       startY: event.clientY,
       grabX: event.clientX - button.left,
       grabY: event.clientY - button.top,
-      x: offsetX,
-      y: offsetY,
+      x,
+      y,
       facing: Number(getComputedStyle(frontRef.current).opacity) >= 0.5 ? 'front' : 'back',
       dragged: false,
     }
@@ -173,7 +197,9 @@ export default function TourismGuide({ activeView }) {
     setManualFacing(gesture.facing)
     gesture.x = x
     gesture.y = y
-    walkerRef.current.style.translate = `${x}px ${y}px`
+    const walker = walkerRef.current
+    walker.style.setProperty('--yuki-drag-x', x + 'px')
+    walker.style.setProperty('--yuki-drag-y', y + 'px')
   }
 
   function releaseYuki(event) {
@@ -183,28 +209,18 @@ export default function TourismGuide({ activeView }) {
     gestureRef.current = null
     if (event.type === 'pointerup' && !gesture.dragged) tellFact()
     const walker = walkerRef.current
-    const offset = walker.style.translate
-    walker.style.translate = ''
-
-    if (Math.hypot(gesture.x, gesture.y) < 1 || window.matchMedia(reducedMotion).matches) {
-      setManualFacing(null)
-      setMotion('walking')
-      return
+    if (gesture.dragged) {
+      const style = getComputedStyle(walker)
+      const routeX = Number.parseFloat(style.getPropertyValue('--yuki-route-x'))
+      const routeY = Number.parseFloat(style.getPropertyValue('--yuki-route-y'))
+      walker.style.setProperty('--yuki-offset-x', (gesture.x - routeX) + 'px')
+      walker.style.setProperty('--yuki-offset-y', (gesture.y - routeY) + 'px')
     }
 
-    setManualFacing(gesture.y > 0 ? 'back' : gesture.y < 0 ? 'front' : gesture.facing)
-    setMotion('returning')
-    const animation = walker.animate(
-      [{ translate: offset }, { translate: '0px 0px' }],
-      { duration: 780, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
-    )
-    returnAnimationRef.current = animation
-    animation.onfinish = () => {
-      if (returnAnimationRef.current !== animation) return
-      returnAnimationRef.current = null
-      setManualFacing(null)
-      setMotion('walking')
-    }
+    walker.style.removeProperty('--yuki-drag-x')
+    walker.style.removeProperty('--yuki-drag-y')
+    setManualFacing(null)
+    setMotion('walking')
   }
 
   function tellFact() {

@@ -17,7 +17,7 @@ Zapzipstadt es una ciudad ficticia habitada por los Michien. Esta web, desarroll
 
 | Sección | Qué encontrarás |
 | --- | --- |
-| [Startseite](https://d4viddy.github.io/Zapzipstadt/#startseite) | Un planeta con seis Michien animados y un ovni que te lleva de vuelta a la portada. |
+| [Startseite](https://d4viddy.github.io/Zapzipstadt/#startseite) | Un planeta por el que caminan seis Michien y su fundadora, cuya historia puedes abrir. Un ovni te lleva de vuelta a la portada. |
 | [Geschichte](https://d4viddy.github.io/Zapzipstadt/#geschichte) | Una línea de tiempo interactiva con 12 hitos ilustrados en cuatro períodos, de 2000 a 2026. |
 | [Unsere Stadt](https://d4viddy.github.io/Zapzipstadt/#unsere-stadt) | Un mapa isométrico con cinco lugares explorables, estadísticas, una infografía y un comparativo con Copenhague y Singapur que incluye videos Full HD. |
 | [Tourismus und Freizeit](https://d4viddy.github.io/Zapzipstadt/#tourismus) | Una publicación de Instagram con corazones animados y Yuki, un Michien al que puedes arrastrar o tocar para descubrir curiosidades en alemán. |

@@ -3,6 +3,9 @@
   color: #e8f2ee;
   --page-background: #0d1523;
   --section-offset: 5.75rem;
+  --site-cursor: url('/media/UFO Cow Abduction Cursor--cursor--SweezyCursors.png') 32 32;
+  --site-pointer: url('/media/UFO Cow Abduction Cursor--pointer--SweezyCursors.png') 32 32;
+  cursor: var(--site-cursor), auto;
   background: var(--page-background);
   scroll-behavior: smooth;
   scroll-padding-block-start: var(--section-offset);
@@ -10,6 +13,10 @@
 
 body {
   margin: 0;
+}
+
+:where(a[href], button:not(:disabled, [aria-disabled="true"])) {
+  cursor: var(--site-pointer), pointer;
 }
 
 @media (max-width: 690px) {

@@ -5,9 +5,8 @@
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-  block-size: 100vh;
-  block-size: 100svh;
-  min-block-size: 32rem;
+  min-block-size: max(32rem, 100vh);
+  min-block-size: max(32rem, 100svh);
   overflow: hidden;
   padding-block-start: clamp(5rem, 11svh, 7rem);
   background: radial-gradient(ellipse at 50% 80%, #203747, #101827 48%, #080d18 90%);
@@ -102,12 +101,24 @@
 }
 
 .hero-world {
+  --planet-width: min(95vw, 44rem, 87svh);
+  --founder-size: calc(var(--planet-width) * 0.12);
+  --story-top: 0.35rem;
+  --story-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
   flex: none;
-  width: min(95vw, 44rem, 87svh);
-  height: auto;
+  width: var(--planet-width);
   margin-block-start: clamp(0.8rem, 2.6svh, 1.55rem);
-  overflow: visible;
   pointer-events: none;
+}
+
+.hero-world__scene {
+  position: absolute;
+  inset: 0 auto auto 0;
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
 }
 
 .hero-world__planet {
@@ -163,13 +174,215 @@
 }
 
 @keyframes michien-front {
-  0%, 48%, 100% { opacity: 0; }
+  0%, 48%, 100% { opacity: var(--michien-front-hidden, 0); }
   51%, 98% { opacity: 1; }
 }
 
 @keyframes michien-back {
-  0%, 47%, 100% { opacity: 1; }
+  0%, 47%, 100% { opacity: var(--michien-back-shown, 1); }
   50%, 97% { opacity: 0; }
+}
+
+.hero-founder-track {
+  position: absolute;
+  z-index: 2;
+  inset: 0 auto auto 0;
+  width: 100%;
+  aspect-ratio: 599 / 612;
+  pointer-events: none;
+}
+
+.hero-founder {
+  position: absolute;
+  inset: 0 auto auto 0;
+  display: grid;
+  place-items: end center;
+  width: max(2.75rem, var(--founder-size));
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 0.75rem;
+  background: transparent;
+  cursor: var(--site-pointer), pointer;
+  pointer-events: auto;
+  translate: -50% -100%;
+}
+
+.hero-founder__art {
+  position: relative;
+  display: block;
+  width: var(--founder-size);
+  aspect-ratio: 1;
+  filter: drop-shadow(0 0.25rem 0.4rem #09292275);
+}
+
+.hero-founder__art > svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-founder-track:is([data-inspecting="true"], :has(:focus-visible)) {
+  --michien-front-hidden: 1;
+  --michien-back-shown: 0;
+  animation-play-state: paused;
+}
+
+.hero-founder-track:is([data-inspecting="true"], :has(:focus-visible)) :is(.michien-step, .michien-front, .michien-back) {
+  animation-play-state: paused;
+}
+
+.hero-founder:focus-visible,
+.hero-story a:focus-visible {
+  outline: 2px solid #e5ffb8;
+  outline-offset: 4px;
+}
+
+.hero-story {
+  position: relative;
+  z-index: 1;
+  inset-inline-start: 50%;
+  display: grid;
+  grid-template-rows: 0fr;
+  width: min(calc(100vw - 2rem), calc(var(--planet-width) + 38rem));
+  translate: -50% 0;
+  transition: grid-template-rows 670ms var(--story-ease);
+}
+
+.hero-world[data-story-open="true"] .hero-story {
+  grid-template-rows: 1fr;
+}
+
+.hero-story__clip {
+  min-height: 0;
+  overflow: clip;
+}
+
+.hero-world[data-story-open="true"] {
+  pointer-events: auto;
+}
+
+.hero-story__cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-content: space-between;
+  align-items: start;
+  column-gap: calc(var(--planet-width) + 2rem);
+  padding: var(--story-top) 0.28rem 1.4rem;
+  text-align: start;
+}
+
+.hero-story__card {
+  padding: clamp(0.8rem, 1.7vw, 1.25rem);
+  border: 1px solid #c5f98c66;
+  border-radius: 1.15rem;
+  background: linear-gradient(155deg, #182e29f5, #0e1b25f5);
+  box-shadow: inset 0 1px 0 #e7ffbf20, 0 0.65rem 1.5rem #020a11aa;
+  opacity: 0;
+  transform: translate(0.75rem, 0.4rem) scale(0.97);
+  transition: opacity 280ms ease, transform 620ms var(--story-ease);
+}
+
+.hero-story__card + .hero-story__card {
+  transform: translate(-0.75rem, 0.4rem) scale(0.97);
+}
+
+.hero-world[data-story-open="true"] .hero-story__card {
+  opacity: 1;
+  transform: none;
+}
+
+.hero-world[data-story-open="true"] .hero-story__card + .hero-story__card {
+  transition-delay: 100ms;
+}
+
+.hero-story__card h2 {
+  margin: 0 0 0.35rem;
+  color: #f7ffe9;
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.hero-story__facts {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding-inline-start: 1rem;
+  color: #d3dfd3;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.hero-story__facts li::marker {
+  color: #b8e67c;
+}
+
+.hero-story__geography + .hero-story__facts {
+  margin-block-start: 0.85rem;
+  padding-block-start: 0.75rem;
+  border-block-start: 1px solid #c5f98c35;
+}
+
+.hero-story__geography {
+  display: flex;
+  align-items: center;
+  gap: 0.48rem;
+}
+
+.hero-story__geography img {
+  flex: none;
+  width: 2.75rem;
+  height: auto;
+}
+
+.hero-story__geography h2 {
+  margin: 0;
+  font-size: clamp(1rem, 1.45vw, 1.3rem);
+}
+
+.hero-story a {
+  display: inline-block;
+  margin-block-start: 0.65rem;
+  color: #defca2;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-underline-offset: 0.16em;
+}
+
+@media (max-width: 1160px), (max-height: 560px) {
+  .hero-story {
+    width: min(calc(100vw - 2rem), 37rem);
+  }
+
+  .hero-story__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+    padding: calc(var(--planet-width) * 612 / 599 + 0.8rem) 0.28rem 1.4rem;
+  }
+
+  .hero-story__card,
+  .hero-story__card + .hero-story__card {
+    transform: translateY(0.75rem);
+  }
+}
+
+@media (max-width: 690px) {
+  .hero-story__cards {
+    padding-inline-end: 4rem;
+  }
+}
+
+@media (max-width: 530px) {
+  .hero-story__cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.hero[data-motion="off"] :is(.hero-story, .hero-story__card) {
+  transition: none;
 }
 
 @media (max-height: 680px) and (min-width: 691px) {
@@ -178,7 +391,7 @@
   }
 
   .hero-world {
-    width: min(95vw, 44rem, 76svh);
+    --planet-width: min(95vw, 44rem, 76svh);
     margin-block-start: 0.55rem;
   }
 }
@@ -189,7 +402,7 @@
   }
 
   .hero-world {
-    width: min(110vw, 37rem, 79svh);
+    --planet-width: min(110vw, 37rem, 79svh);
     margin-block-start: clamp(1.2rem, 5.5svh, 4rem);
   }
 }

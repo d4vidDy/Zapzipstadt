@@ -56,6 +56,11 @@
   min-inline-size: 0;
 }
 
+.tourism-carousel:has(.tourism-film-embed) {
+  position: relative;
+  z-index: 3;
+}
+
 .tourism-window {
   overflow: hidden;
   border: 1px solid #b6f17b30;
@@ -83,6 +88,7 @@
 }
 
 #tourism-video {
+  grid-template-columns: minmax(0, 1fr);
   --tourism-panel-offset: 1.6rem;
 }
 
@@ -174,31 +180,122 @@
   line-height: 1.65;
 }
 
-.tourism-video-placeholder {
-  display: flex;
-  aspect-ratio: 16 / 9;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.7rem;
-  border: 1px solid #b6f17b35;
-  border-radius: 1rem;
-  background: radial-gradient(ellipse at 50% 42%, #243e30, #0b151e 76%);
-  color: var(--tourism-muted);
-  font-size: 0.82rem;
+.tourism-film-frame {
+  overflow: hidden;
+  border: 1px solid #b6f17b4d;
+  border-radius: 1.05rem;
+  background: linear-gradient(155deg, #172c25, #0c1620 78%);
+  box-shadow: 0 0.75rem 2rem #03080e69, 0 0 1rem #b6f17b14;
 }
 
-.tourism-play-icon {
+.tourism-film-screen {
+  position: relative;
   display: grid;
-  inline-size: 3.15rem;
-  block-size: 3.15rem;
-  box-sizing: border-box;
   place-items: center;
-  padding-inline-start: 0.16rem;
-  border: 1px solid #b6f17b58;
+  inline-size: 100%;
+  min-block-size: 200px;
+  aspect-ratio: 16 / 9;
+  background: radial-gradient(ellipse at 50% 42%, #243e30, #0b151e 76%);
+}
+
+.tourism-film-preview,
+.tourism-film-embed {
+  position: absolute;
+  inset: 0;
+}
+
+.tourism-film-preview {
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  inline-size: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: var(--site-pointer), pointer;
+}
+
+.tourism-film-preview img,
+.tourism-film-preview::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.tourism-film-preview img {
+  z-index: -2;
+  object-fit: cover;
+}
+
+.tourism-film-preview::before {
+  background: linear-gradient(180deg, #05110f16, #05110f7a);
+  content: '';
+}
+
+.tourism-film-play {
+  display: grid;
+  place-items: center;
+  inline-size: clamp(3.3rem, 6vw, 4rem);
+  aspect-ratio: 1;
+  border: 1px solid #f2ffc5;
   border-radius: 50%;
+  background: linear-gradient(145deg, #e4ffa1, #a7e75f);
+  box-shadow: 0 0 0 0.36rem #12251b8f, 0 0.55rem 1.4rem #05120ba6;
+  color: #142a1c;
+  transition: transform 320ms var(--tourism-ease);
+}
+
+.tourism-film-play svg {
+  margin-inline-start: 0.12rem;
+}
+
+.tourism-film-preview:hover .tourism-film-play {
+  transform: scale(1.09);
+}
+
+.tourism-film-embed iframe {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  border: 0;
+}
+
+.tourism-video .tourism-film-error {
+  margin: 0;
+  padding: 1rem;
+  text-align: center;
+}
+
+.tourism-film-links {
+  display: flex;
+  justify-content: flex-end;
+  padding-inline: 0.65rem;
+  border-block-start: 1px solid #b6f17b30;
+}
+
+.tourism-film-links a {
+  display: inline-flex;
+  min-block-size: 2.75rem;
+  align-items: center;
+  gap: 0.4rem;
+  padding-inline: 0.25rem;
+  color: #e6f4da;
+  font-size: 0.8rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.tourism-film-links a:hover {
   color: var(--tourism-lime);
-  font-size: 1rem;
+}
+
+.tourism-film-preview:focus-visible,
+.tourism-film-embed iframe:focus-visible,
+.tourism-film-links a:focus-visible {
+  outline: 2px solid var(--tourism-lime);
+  outline-offset: -3px;
 }
 
 .tourism-controls {
@@ -214,7 +311,7 @@
 .tourism-controls button {
   box-sizing: border-box;
   font-family: inherit;
-  cursor: pointer;
+  cursor: var(--site-pointer), pointer;
 }
 
 .tourism-controls button:focus-visible {
@@ -239,7 +336,7 @@
 .tourism-arrow[aria-disabled="true"] {
   border-color: #b6f17b20;
   color: #8b9f91;
-  cursor: default;
+  cursor: var(--site-cursor), default;
 }
 
 .tourism-arrow:not([aria-disabled="true"]):hover {
@@ -313,7 +410,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .tourism-panel,
-  .tourism-controls button {
+  .tourism-controls button,
+  .tourism-film-play {
     transition: none;
   }
 }
@@ -329,6 +427,18 @@
   pointer-events: none;
 }
 
+@property --yuki-route-x {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --yuki-route-y {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
 .tourism-guide-walker {
   --yuki-bubble-width: min(16.25rem, 84cqw);
   --yuki-range-x: calc(100cqw - var(--yuki-bubble-width));
@@ -338,7 +448,26 @@
   display: grid;
   inline-size: var(--yuki-bubble-width);
   justify-items: center;
-  transform: translate3d(calc(var(--yuki-range-x) * 0.08), calc(var(--yuki-range-y) * 0.82), 0);
+  --yuki-route-x: calc(var(--yuki-range-x) * 0.08);
+  --yuki-route-y: calc(var(--yuki-range-y) * 0.82);
+  --yuki-min-x: 0px;
+  --yuki-min-y: 0px;
+  --yuki-max-x: var(--yuki-range-x);
+  --yuki-max-y: var(--yuki-range-y);
+  --yuki-width: max(1px, calc(var(--yuki-max-x) - var(--yuki-min-x)));
+  --yuki-height: max(1px, calc(var(--yuki-max-y) - var(--yuki-min-y)));
+
+  /* Reflect the shifted route at the edges so Yuki keeps walking after an edge drop. */
+  --yuki-phase-x: mod(var(--yuki-route-x) + var(--yuki-offset-x, 0px) - var(--yuki-min-x), 2 * var(--yuki-width));
+  --yuki-phase-y: mod(var(--yuki-route-y) + var(--yuki-offset-y, 0px) - var(--yuki-min-y), 2 * var(--yuki-height));
+  --yuki-walk-x: calc(var(--yuki-max-x) - abs(var(--yuki-phase-x) - var(--yuki-width)));
+  --yuki-walk-y: calc(var(--yuki-max-y) - abs(var(--yuki-phase-y) - var(--yuki-height)));
+  --yuki-reversed-y: max(0, sign(var(--yuki-phase-y) - var(--yuki-height)));
+  transform: translate3d(
+    clamp(var(--yuki-min-x), var(--yuki-drag-x, var(--yuki-walk-x)), var(--yuki-max-x)),
+    clamp(var(--yuki-min-y), var(--yuki-drag-y, var(--yuki-walk-y)), var(--yuki-max-y)),
+    0
+  );
 }
 
 .tourism-guide-bubble {
@@ -381,7 +510,7 @@
   background: transparent;
   color: #e3f7d2;
   font: inherit;
-  cursor: grab;
+  cursor: var(--site-pointer), grab;
   pointer-events: auto;
   touch-action: none;
   user-select: none;
@@ -389,7 +518,7 @@
 }
 
 .tourism-guide-walker:is([data-motion="held"], [data-motion="dragging"]) .tourism-guide-cat {
-  cursor: grabbing;
+  cursor: var(--site-pointer), grabbing;
 }
 
 .tourism-guide-cat:focus-visible {
@@ -436,15 +565,15 @@
 
 .tourism-guide-back {
   inset-block-end: -6.4%;
-  --yuki-away: 1;
-  --yuki-toward: 0;
+  --yuki-away: calc(1 - var(--yuki-reversed-y));
+  --yuki-toward: var(--yuki-reversed-y);
   opacity: 0;
 }
 
 .tourism-guide-front {
   inset-block-end: -35.5%;
-  --yuki-away: 0;
-  --yuki-toward: 1;
+  --yuki-away: var(--yuki-reversed-y);
+  --yuki-toward: calc(1 - var(--yuki-reversed-y));
 }
 
 /* Keep the walking animations in sync while overriding the visible pose. */
@@ -499,35 +628,43 @@
 
 @keyframes tourism-yuki-route {
   0%, 100% {
-    transform: translate3d(calc(var(--yuki-range-x) * 0.08), calc(var(--yuki-range-y) * 0.82), 0);
+    --yuki-route-x: calc(var(--yuki-range-x) * 0.08);
+  --yuki-route-y: calc(var(--yuki-range-y) * 0.82);
   }
 
   13% {
-    transform: translate3d(calc(var(--yuki-range-x) * 0.28), calc(var(--yuki-range-y) * 0.81), 0);
+    --yuki-route-x: calc(var(--yuki-range-x) * 0.28);
+    --yuki-route-y: calc(var(--yuki-range-y) * 0.81);
   }
 
   24% {
-    transform: translate3d(calc(var(--yuki-range-x) * 0.38), calc(var(--yuki-range-y) * 0.94), 0);
+    --yuki-route-x: calc(var(--yuki-range-x) * 0.38);
+    --yuki-route-y: calc(var(--yuki-range-y) * 0.94);
   }
 
   40% {
-    transform: translate3d(calc(var(--yuki-range-x) * 0.72), var(--yuki-range-y), 0);
+    --yuki-route-x: calc(var(--yuki-range-x) * 0.72);
+    --yuki-route-y: var(--yuki-range-y);
   }
 
   51% {
-    transform: translate3d(var(--yuki-range-x), calc(var(--yuki-range-y) * 0.66), 0);
+    --yuki-route-x: var(--yuki-range-x);
+    --yuki-route-y: calc(var(--yuki-range-y) * 0.66);
   }
 
   62% {
-    transform: translate3d(calc(var(--yuki-range-x) * 0.89), calc(var(--yuki-range-y) * 0.94), 0);
+    --yuki-route-x: calc(var(--yuki-range-x) * 0.89);
+    --yuki-route-y: calc(var(--yuki-range-y) * 0.94);
   }
 
   78% {
-    transform: translate3d(calc(var(--yuki-range-x) * 0.51), var(--yuki-range-y), 0);
+    --yuki-route-x: calc(var(--yuki-range-x) * 0.51);
+    --yuki-route-y: var(--yuki-range-y);
   }
 
   91% {
-    transform: translate3d(calc(var(--yuki-range-x) * 0.15), calc(var(--yuki-range-y) * 0.85), 0);
+    --yuki-route-x: calc(var(--yuki-range-x) * 0.15);
+    --yuki-route-y: calc(var(--yuki-range-y) * 0.85);
   }
 }
 
@@ -544,19 +681,23 @@
 
 @keyframes tourism-yuki-mobile-route {
   0%, 100% {
-    transform: translate3d(calc(var(--yuki-range-x) * 0.13), calc(var(--yuki-range-y) * 0.74), 0);
+    --yuki-route-x: calc(var(--yuki-range-x) * 0.13);
+    --yuki-route-y: calc(var(--yuki-range-y) * 0.74);
   }
 
   25% {
-    transform: translate3d(calc(var(--yuki-range-x) * 0.75), calc(var(--yuki-range-y) * 0.89), 0);
+    --yuki-route-x: calc(var(--yuki-range-x) * 0.75);
+    --yuki-route-y: calc(var(--yuki-range-y) * 0.89);
   }
 
   50% {
-    transform: translate3d(var(--yuki-range-x), calc(var(--yuki-range-y) * 0.7), 0);
+    --yuki-route-x: var(--yuki-range-x);
+    --yuki-route-y: calc(var(--yuki-range-y) * 0.7);
   }
 
   74% {
-    transform: translate3d(calc(var(--yuki-range-x) * 0.42), var(--yuki-range-y), 0);
+    --yuki-route-x: calc(var(--yuki-range-x) * 0.42);
+    --yuki-route-y: var(--yuki-range-y);
   }
 }
 
@@ -587,7 +728,8 @@
   }
 
   .tourism-guide-walker {
-    transform: translate3d(calc(var(--yuki-range-x) * 0.13), calc(var(--yuki-range-y) * 0.74), 0);
+    --yuki-route-x: calc(var(--yuki-range-x) * 0.13);
+    --yuki-route-y: calc(var(--yuki-range-y) * 0.74);
   }
 
   @media (prefers-reduced-motion: no-preference) {

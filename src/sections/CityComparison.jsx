@@ -85,7 +85,7 @@ export default function CityComparison() {
       </div>
 
       <div className="city-comparison-panels" ref={panelsRef}>
-        {cityComparisons.map(({ id, name, location, alt, media, topic, real, fictional }, index) => {
+        {cityComparisons.map(({ id, name, location, alt, media, comparisons }, index) => {
           const isActive = index === activeIndex
           const poster = `${mediaDirectory}${media}.webp`
           return (
@@ -115,11 +115,10 @@ export default function CityComparison() {
                 <figcaption>{location}</figcaption>
               </figure>
               <div className="city-comparison-copy">
-                <h4>{topic}</h4>
-                <dl>
-                  <div><dt>{name}</dt><dd>{real}</dd></div>
-                  <div><dt>Zapzipstadt</dt><dd>{fictional}</dd></div>
-                </dl>
+                <h4>{name}</h4>
+                <ul>
+                  {comparisons.map((statement) => <li key={statement}>{statement}</li>)}
+                </ul>
               </div>
             </div>
           )
@@ -127,7 +126,7 @@ export default function CityComparison() {
       </div>
 
       <div className="city-comparison-footer">
-        <p>Zapzipstadt ist eine fiktive Stadt aus unserem Deutschprojekt.</p>
+        <p>Die Vergleiche mit Zapzipstadt gehören zur fiktiven Geschichte unseres Deutschprojekts.</p>
         <button type="button" onClick={() => setShowMotion((enabled) => !enabled)}>
           {showMotion ? 'Video anhalten' : 'Video abspielen'}
         </button>
